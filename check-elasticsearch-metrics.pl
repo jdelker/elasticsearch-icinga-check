@@ -60,31 +60,26 @@ sub makeElasticsearchRequest {
   my $req = HTTP::Request->new(POST => $reqUrl);
   $req->content_type('application/json');
   $reqContent = "{
-    \"size\": 0,
-    \"query\": {
-      \"filtered\": {
-        \"query\": {
-          \"query_string\": {
-            \"query\": \"$query\",
-            \"analyze_wildcard\": true
-          }
-        },
-        \"filter\": {
-          \"bool\": {
-            \"must\": [
-              {
-                \"range\": {
-                  \"\@timestamp\": {
-                    \"gte\": \"$fromTime\"
-                  }
-                }
-              }
-            ],
-            \"must_not\": []
-          }
-        }
-      }
-    }";
+  	\"size\": 0,
+  	\"query\": {
+  		\"bool\": {
+  			\"filter\": {
+  				\"bool\": {
+  					\"must\": [{
+  						\"range\": {
+  							\"@timestamp\": { \"gte\": \"$fromTime\" }
+  						}
+  					}]
+  				}
+  			},
+  			\"must\": {
+  				\"query_string\": {
+  					\"query\": \"$query\",
+  					\"analyze_wildcard\": true
+  				}
+  			}
+  		}
+  	}";
   if($hasAggregation){
     $reqContent = "$reqContent,\"aggs\": {
         \"$aggregationName\": {
