@@ -67,7 +67,7 @@ sub makeElasticsearchRequest {
   				\"bool\": {
   					\"must\": [{
   						\"range\": {
-  							\"@timestamp\": { \"gte\": \"$fromTime\" }
+  							\"\@timestamp\": { \"gte\": \"$fromTime\" }
   						}
   					}]
   				}
